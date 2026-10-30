@@ -6,13 +6,13 @@ import { randomBytes, createCipheriv, createDecipheriv } from 'node:crypto';
 import { EventEmitter } from 'node:events';
 import { PassThrough } from 'node:stream';
 import { tmpdir } from 'node:os';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { createProviderStore, endpointUrl } from '../app/providers.mjs';
 import { createApiProvider } from '../app/api-provider.mjs';
 import { createWorkbuddyProvider, workbuddyArguments } from '../app/workbuddy-provider.mjs';
 import { createBridge } from '../app/bridge.mjs';
 
-const scratch = pathToFileURL(tmpdir() + '/');
+const scratch = tmpdir();
 function encryption() {
   const key = randomBytes(32);
   return { isAvailable: () => true, encrypt(text) {
@@ -26,7 +26,7 @@ function encryption() {
   } };
 }
 test('separate encrypted provider keys survive switching without appearing in public state', () => {
-  const directory = mkdtempSync(join(new URL(scratch).pathname.replace(/^\/(\w:)/, '$1'), 'provider-test-'));
+  const directory = mkdtempSync(join(scratch, 'provider-test-'));
   const cipher = encryption();
   const store = createProviderStore({ directory, encryption: cipher });
   assert.equal(store.active(), 'chatgpt');
@@ -52,7 +52,7 @@ test('unsafe URLs and corrupt encrypted storage fail closed', () => {
   assert.equal(endpointUrl('https://api.deepseek.com'), 'https://api.deepseek.com/chat/completions');
   assert.equal(endpointUrl('https://ark.cn-beijing.volces.com/api/v3/chat/completions'), 'https://ark.cn-beijing.volces.com/api/v3/chat/completions');
   assert.equal(endpointUrl('http://127.0.0.1:1234/v1'), 'http://127.0.0.1:1234/v1/chat/completions');
-  const directory = mkdtempSync(join(new URL(scratch).pathname.replace(/^\/(\w:)/, '$1'), 'provider-corrupt-'));
+  const directory = mkdtempSync(join(scratch, 'provider-corrupt-'));
   writeFileSync(join(directory, 'model-connections.encrypted.json'), '{"version":1,"ciphertext":"broken"}');
   assert.throws(() => createProviderStore({ directory, encryption: encryption() }), /无法解密/);
 });
@@ -93,7 +93,7 @@ test('WorkBuddy adapter disables tools/MCP and does not duplicate streamed text'
   const args = workbuddyArguments('fast-model', 'system');
   assert.equal(args[args.indexOf('--tools') + 1], ''); assert.ok(args.includes('--strict-mcp-config')); assert.ok(args.includes('--no-session-persistence'));
   let prompt = '';
-  const service = createWorkbuddyProvider({ executable: 'node', cliPath: 'official-cli', root: new URL('../', import.meta.url).pathname.replace(/^\/(\w:)/, '$1'), getModel: () => 'fast-model', spawnProcess: (exe, cliArgs, options) => {
+  const service = createWorkbuddyProvider({ executable: 'node', cliPath: 'official-cli', root: fileURLToPath(new URL('../', import.meta.url)), getModel: () => 'fast-model', spawnProcess: (exe, cliArgs, options) => {
     assert.equal(exe, 'node'); assert.equal(options.windowsHide, true);
     const child = new EventEmitter(); Object.assign(child, { stdout: new PassThrough(), stderr: new PassThrough(), stdin: new PassThrough(), kill() {} });
     child.stdin.on('data', b => { prompt += b; });
