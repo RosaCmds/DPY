@@ -1,4 +1,5 @@
-import { existsSync, readFileSync, writeFileSync, renameSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'node:fs';
+import { replaceFileSync } from './atomic-file.mjs';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 
@@ -50,7 +51,8 @@ export function createProviderStore({ directory, encryption }) {
     const encrypted = encryption.encrypt(JSON.stringify(next));
     const temporary = `${file}.${randomUUID()}.tmp`;
     writeFileSync(temporary, JSON.stringify({ version: 1, ciphertext: Buffer.from(encrypted).toString('base64') }), { mode: 0o600, flag: 'wx' });
-    renameSync(temporary, file);
+    try { replaceFileSync(temporary, file); }
+    catch (error) { try { unlinkSync(temporary); } catch {} throw error; }
     saved = next;
   }
   function connection(id) {
