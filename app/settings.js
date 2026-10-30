@@ -17,8 +17,8 @@ function hydrate(s, force = false) {
   }
   const preset = s.connections.providers.find(p => p.id === selected);
   get('model-suggestions').replaceChildren(...(preset?.models ?? []).map(m => new Option(m, m)));
-  get('api-heading').textContent = selected === 'deepseek' ? 'DeepSeek API' : selected === 'doubao' ? '豆包 · 火山方舟 API' : 'OpenAI 兼容接口';
-  get('api-description').textContent = selected === 'doubao' ? '填写火山方舟 API Key，以及控制台显示的模型 ID 或 ep- 开头的推理接入点 ID。豆包 App 登录凭据不能填在这里。' : selected === 'deepseek' ? '填写 DeepSeek 开放平台 API Key；默认使用 DeepSeek Flash，也可填写账户可用的模型 ID。' : '支持提供 Chat Completions 协议的服务商和本机兼容接口。';
+  get('api-heading').textContent = selected === 'deepseek' ? 'DeepSeek API' : selected === 'doubao' ? '豆包 · 火山方舟 API' : selected === 'kimi' ? 'Kimi · Moonshot API' : 'OpenAI 兼容接口';
+  get('api-description').textContent = selected === 'doubao' ? '填写火山方舟 API Key，以及控制台显示的模型 ID 或 ep- 开头的推理接入点 ID。豆包 App 登录凭据不能填在这里。' : selected === 'deepseek' ? '填写 DeepSeek 开放平台 API Key；默认使用 DeepSeek Flash，也可填写账户可用的模型 ID。' : selected === 'kimi' ? '填写 Kimi 开放平台的 Moonshot API Key。默认使用 Kimi K2.6 非思考模式快速聊天；接口地址和模型 ID 可修改。使用开放平台 API 额度。' : '支持提供 Chat Completions 协议的服务商和本机兼容接口。';
   get('api-model').placeholder = selected === 'doubao' ? '控制台提供的模型 ID 或 ep-…' : '该服务商的模型 ID';
 }
 function render(s) {

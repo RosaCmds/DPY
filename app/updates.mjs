@@ -37,6 +37,6 @@ export function createUpdates({ app, root, beforeInstall = () => {}, Updater }) 
     state: () => ({ ...state }),
     check: () => run(() => updater.checkForUpdates()),
     download: () => run(async () => { state = { ...state, status: 'downloading', message: '开始下载更新…' }; await updater.downloadUpdate(); }, 'available'),
-    install: () => { if (state.status !== 'downloaded' || busy) return; beforeInstall(); updater.quitAndInstall(false, true); },
+    install: () => { if (state.status !== 'downloaded' || busy) return; beforeInstall(); updater.quitAndInstall(true, true); },
   };
 }

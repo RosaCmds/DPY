@@ -7,6 +7,7 @@ export const PROVIDERS = Object.freeze([
   { id: 'chatgpt', name: 'ChatGPT · 账号订阅', kind: 'account' },
   { id: 'deepseek', name: 'DeepSeek · API Key', kind: 'api', baseUrl: 'https://api.deepseek.com', model: 'deepseek-flash', models: ['deepseek-flash', 'deepseek-v4-pro'] },
   { id: 'doubao', name: '豆包 · 火山方舟 API Key', kind: 'api', baseUrl: 'https://ark.cn-beijing.volces.com/api/v3', model: '', models: [] },
+  { id: 'kimi', name: 'Kimi · Moonshot API Key', kind: 'api', baseUrl: 'https://api.moonshot.cn/v1', model: 'kimi-k2.6', models: ['kimi-k2.6'] },
   { id: 'workbuddy', name: 'WorkBuddy / CodeBuddy · 腾讯账号', kind: 'cli', model: 'fast-model', models: [] },
   { id: 'custom', name: '其他 OpenAI 兼容接口', kind: 'api', baseUrl: '', model: '', models: [] },
 ]);

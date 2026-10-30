@@ -18,7 +18,7 @@ export function createApiProvider({ getConnection, fetcher = globalThis.fetch })
       let text = '', completed = false;
       try {
         const stream = await client.chat.completions.create({ model: config.model, messages: [{ role: 'system', content: instructions ?? '' }, ...input], stream: true, max_tokens: Number.isInteger(maxTokens) ? Math.max(128, Math.min(4096, maxTokens)) : 1024,
-          ...(['deepseek', 'doubao'].includes(config.provider) ? { thinking: { type: 'disabled' } } : {}),
+          ...(['deepseek', 'doubao'].includes(config.provider) || (config.provider === 'kimi' && config.model === 'kimi-k2.6') ? { thinking: { type: 'disabled' } } : {}),
         }, { signal });
         for await (const event of stream) {
           signal?.throwIfAborted();

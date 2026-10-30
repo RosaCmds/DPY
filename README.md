@@ -1,7 +1,7 @@
 # DPY 桌宠 · 多模型独立版
 
 基于 [PC2005-cloud/dsh-pet](https://github.com/PC2005-cloud/dsh-pet) 0.3.8 的 Windows x64 独立安装版。
-保留原桌宠动画与交互，增加 ChatGPT 账号、DeepSeek API、豆包 API、腾讯 WorkBuddy / CodeBuddy 账号和 OpenAI 兼容接口。
+保留原桌宠动画与交互，增加 ChatGPT 账号、DeepSeek API、豆包 API、Kimi API、腾讯 WorkBuddy / CodeBuddy 账号和 OpenAI 兼容接口。
 
 ## 安装与使用
 

@@ -161,7 +161,7 @@ if (locked) app.whenReady().then(async () => {
     } catch (error) { notice = `测试未完成：${error.message}`; } finally { busy = false; }
     return state();
   });
-  ipcMain.handle('pet:usage', event => { validate(event); const urls = { chatgpt: 'https://chatgpt.com/settings/usage', deepseek: 'https://platform.deepseek.com', doubao: 'https://console.volcengine.com/ark', workbuddy: 'https://www.codebuddy.cn/console' }; return shell.openExternal(urls[providers.active()] ?? 'https://www.codebuddy.cn/docs/cli/cli-reference'); });
+  ipcMain.handle('pet:usage', event => { validate(event); const urls = { chatgpt: 'https://chatgpt.com/settings/usage', deepseek: 'https://platform.deepseek.com', doubao: 'https://console.volcengine.com/ark', kimi: 'https://platform.kimi.com', workbuddy: 'https://www.codebuddy.cn/console' }; return shell.openExternal(urls[providers.active()] ?? 'https://www.codebuddy.cn/docs/cli/cli-reference'); });
   ipcMain.handle('pet:update-check', async event => { validate(event); await updates.check(); return state(); });
   ipcMain.handle('pet:update-download', async event => { validate(event); await updates.download(); return state(); });
   ipcMain.handle('pet:update-install', event => { validate(event); updates.install(); });

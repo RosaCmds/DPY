@@ -14,7 +14,7 @@ test('updates only use the configured GitHub release source and explicit install
     constructor(options) { super(); instance = this; assert.deepEqual(options, { provider: 'github', owner: 'RosaCmds', repo: 'DPY', releaseType: 'release' }); }
     async checkForUpdates() { this.emit('checking-for-update'); this.emit('update-available', { version: '1.4.0' }); }
     async downloadUpdate() { this.emit('download-progress', { percent: 50 }); this.emit('update-downloaded'); }
-    quitAndInstall(...args) { assert.deepEqual(args, [false, true]); installed++; }
+    quitAndInstall(...args) { assert.deepEqual(args, [true, true]); installed++; }
   }
   const service = createUpdates({ app: { isPackaged: true, getVersion: () => '1.3.0' }, Updater: Fake, beforeInstall: () => stopped++ });
   service.install(); assert.equal(installed, 0);
