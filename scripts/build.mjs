@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync, statSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
@@ -40,8 +40,18 @@ await build({ projectDir: root, publish: 'never', config: {
   asar: false, npmRebuild: false, compression: 'normal',
   directories: { output: 'dist' },
   files: ['bootstrap.cjs', 'app/**/*', 'release.json', 'THIRD-PARTY-NOTICES.txt', 'licenses/**/*', 'package.json'],
-  extraResources: [ { from: 'vendor/runtime', to: 'runtime' }, { from: 'vendor/workbuddy-cli', to: 'workbuddy-cli', filter: ['**/*', '!**/.cache/**', '!**/*.log'] } ],
+  extraResources: [ { from: 'vendor/runtime', to: 'runtime' } ],
+  afterPack: async context => {
+    // electron-builder excludes nested node_modules from extraResources globs.
+    // Copy the pinned CLI tree explicitly after its file filtering has finished.
+    cpSync(cli, join(context.appOutDir, 'resources', 'workbuddy-cli'), { recursive: true });
+    for (const file of [
+      join(context.appOutDir, 'resources/app/node_modules/dsh-pet/assets/webm/待机呼吸休闲.webm'),
+      join(context.appOutDir, 'resources/workbuddy-cli/node_modules/@tencent-ai/codebuddy-code/bin/codebuddy'),
+      join(context.appOutDir, 'resources/runtime/node.exe'),
+    ]) if (!existsSync(file) || statSync(file).size < 100) throw new Error('安装资源缺失：' + file);
+  },
   win: { target: [{ target: 'nsis', arch: ['x64'] }], artifactName: 'DPY-Pet-Setup-${version}-${arch}.${ext}' },
-  nsis: { oneClick: false, perMachine: false, allowElevation: false, allowToChangeInstallationDirectory: true, createDesktopShortcut: true, createStartMenuShortcut: true, shortcutName: 'DPY 桌宠', deleteAppDataOnUninstall: false, installerLanguages: ['zh_CN', 'en_US'], language: '2052', include: 'scripts/installer.nsh' },
+  nsis: { preCompressedFileExtensions: [], oneClick: false, perMachine: false, allowElevation: false, allowToChangeInstallationDirectory: true, createDesktopShortcut: true, createStartMenuShortcut: true, shortcutName: 'DPY 桌宠', deleteAppDataOnUninstall: false, installerLanguages: ['zh_CN', 'en_US'], language: '2052', include: 'scripts/installer.nsh' },
   publish: { provider: 'github', owner: 'RosaCmds', repo: 'DPY', releaseType: 'release' }
 } });

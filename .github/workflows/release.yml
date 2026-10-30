@@ -27,6 +27,9 @@ jobs:
             exit $testExit
           }
       - run: npm run build:win
+      - name: Verify actual installer payload
+        shell: pwsh
+        run: ./scripts/verify-install.ps1
       - name: Verify tag and version
         if: startsWith(github.ref, 'refs/tags/')
         shell: pwsh
