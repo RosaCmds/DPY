@@ -1,0 +1,22 @@
+DPY 桌宠 · 多模型独立版
+
+本安装包适用于个人非商业使用。OpenAI Sign-in with ChatGPT Devkit
+采用 NONCOMMERCIAL LICENSE；不授予商业使用权。详见 licenses/。
+每位用户需要自行登录或配置自己的模型服务，软件不附赠订阅或 API 额度。
+
+dsh-pet 0.3.8: Copyright (c) 2026 PC2005-cloud, MIT.
+https://github.com/PC2005-cloud/dsh-pet
+定制修改：electron-helper/main.js 中将 Chromium profile 隔离至应用数据目录。
+其余多模型连接、设置、安装与更新代码位于独立 app/ 和 scripts/ 目录。
+
+OpenAI Sign-in with ChatGPT Devkit: Copyright 2026 OpenAI.
+原有 SDK 未修改，许可证位于 app/sdk/LICENSE 和 licenses/。
+
+Tencent CodeBuddy Code 2.178.1: Copyright 2023 Tencent Cloud.
+保留软件自带 LICENSE.txt；licenses/CodeBuddy.txt 提供其副本。
+
+Electron 43.3.0: MIT / Chromium third party licenses，见安装目录 LICENSE、LICENSES.chromium.html。
+Node.js 24.14.0: 见 resources/runtime/LICENSE_NODE.txt。
+其他依赖的许可证保留在 resources/app/node_modules/ 和 resources/workbuddy-cli/node_modules/ 中。
+
+本软件不是上述厂商的官方桌面宠物产品。账号服务及素材权利以各自条款为准。

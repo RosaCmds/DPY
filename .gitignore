@@ -1,0 +1,8 @@
+node_modules/
+vendor/
+dist/
+data/
+*.log
+*.encrypted.json
+.env*
+tests/provider-*/

@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@tencent-ai/codebuddy-code": "2.178.1"
+  }
+}

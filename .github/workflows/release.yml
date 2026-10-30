@@ -1,0 +1,38 @@
+name: Build Windows installer
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24.14.0'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - run: npm run build:win
+      - name: Verify tag and version
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          if ($env:GITHUB_REF_NAME -ne "v$version") { throw 'Tag/version mismatch' }
+      - uses: actions/upload-artifact@v7
+        with:
+          name: DPY-Windows-installer
+          path: |
+            dist/*.exe
+            dist/*.blockmap
+            dist/latest.yml
+      - name: Publish tagged release
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create $env:GITHUB_REF_NAME dist/*.exe dist/*.blockmap dist/latest.yml --title "DPY 桌宠 $env:GITHUB_REF_NAME" --generate-notes --repo $env:GITHUB_REPOSITORY
